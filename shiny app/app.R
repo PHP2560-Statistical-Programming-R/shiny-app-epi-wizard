@@ -1,29 +1,33 @@
+#install Epicalculator package first by using following code
+#devtools::install_github("PHP2560-Statistical-Programming-R/r-package-episquad-2-0")
 library(shiny)
 library(shinyjs)
 library(Epicalculator)
 library(ggplot2)
+library(shinythemes)
 ui <-  navbarPage(useShinyjs(),
-                  #hide the error message in the app 
+                  theme = shinytheme("journal"),
+                  #hide the error message in the app
                   hidden(tags$style
                          (type="text/css",
-                        ".shiny-output-error { visibility: hidden; }",
-                        ".shiny-output-error:before { visibility: hidden; }"
-                  )),
-                  
+                         ".shiny-output-error { visibility: hidden; }",
+                         ".shiny-output-error:before { visibility: hidden; }"
+                         )),
+
                   #Title of the app
                   title = "Epi Wizard",
-                  
+
                   #introduction panel for description of the app
                   tabPanel("Introduction",
                            verbatimTextOutput("introduction")),
-                  
- #creating 4 navgation panel for rate data, risk data, others and graphs
- #inside each navigation panel we will have tabpanel for different measures 
-  #i.e.RR and RD
- #inside the tab we will use sidebarlayout with sideparpanel for input 
-   #and mainpanel for output
- 
- 
+
+                  #creating 4 navgation panel for rate data, risk data, others and graphs
+                  #inside each navigation panel we will have tabpanel for different measures
+                  #i.e.RR and RD
+                  #inside the tab we will use sidebarlayout with sideparpanel for input
+                  #and mainpanel for output
+
+
  ###########################################################################################################
  #panel 1 for risk ratio and difference
                   navbarMenu("Risk data",
@@ -50,8 +54,8 @@ ui <-  navbarPage(useShinyjs(),
                                           br(),
                                           plotOutput("rr", height = "200px")) #risk ratio plot
                                       )),
-                             
-                              #risk ratio tab
+
+                              #risk difference tab
                               tabPanel("Risk Difference",
                                         sidebarLayout(
                                          sidebarPanel(
@@ -75,110 +79,133 @@ ui <-  navbarPage(useShinyjs(),
                                            plotOutput("rd", height = "200px"))#risk difference plot
                                         ))
                   ),
- 
- 
+
+
 ################################################################################################################
 #panel 2 for rate ratio and difference
                   navbarMenu("Person-Time data",
                         #rate ratio tab
                         tabPanel("Rate Ratio",
-                          sidebarLayout(
-                              sidebarPanel(
-                                  textInput("a1", "exposed people with disease"),
-                                  textInput("b1", "unexposed people with disease"),
-                                  textInput("c1", "exposed person time"),
-                                  textInput("d1", "unexposed person time"),
-                                  submitButton("Show Rate Ratio")
-                                  ),
-                                   mainPanel=(htmlOutput("irr"))
-                                )),
+                                 sidebarLayout(
+                                   sidebarPanel(
+                                     textInput('cirr', 'Enter crude data (separated by comma)'),
+                                     submitButton("Show Crude Rate Ratio"),
+                                     br(),#adding blank space
+                                     textInput('sirr', 'Enter summary data (separated by comma)'),
+                                     submitButton("Show Summary Rate Ratio"),
+                                     br(), #adding blank space
+                                     textInput('irr', 'Show Rate Ratio Plot (enter YES or NO)'),
+                                     #Download button for the plot
+                                     downloadButton('downIRR', "Download the Plot")
+                                   ),
+                                   mainPanel(
+                                     htmlOutput("cirr"), #crude rate ratio output
+                                     br(),
+                                     br(),
+                                     htmlOutput("sirr"),#summary rate ratio output
+                                     br(),
+                                     br(),
+                                     plotOutput("irr", height = "200px")) #rate ratio plot
+                                 )),
+
                         #rate Difference tab
                         tabPanel("Rate Difference",
-                          sidebarLayout(
-                              sidebarPanel(
-                                    textInput("a2", "exposed people with disease"),
-                                    textInput("b2", "unexposed people with disease"),
-                                    textInput("c2", "exposed person time"),
-                                    textInput("d2", "unexposed person time"),
-                                    submitButton("Show Rate Difference")
-                                    ),
-                                    mainPanel=(htmlOutput("ird"))
-                                ))
+                                 sidebarLayout(
+                                   sidebarPanel(
+                                     textInput('cird', 'Enter crude data (separated by comma)'),
+                                     submitButton("Show Crude Rate Difference"),
+                                     br(),#adding blank space
+                                     textInput('sird', 'Enter summary data (separated by comma)'),
+                                     submitButton("Show Summary Rate Difference"),
+                                     br(), #adding blank space
+                                     textInput('ird', 'Show Rate Difference Plot (enter YES or NO)'),
+                                     #Download button for the plot
+                                     downloadButton('downIRD', "Download the Plot")
+                                   ),
+                                   mainPanel(
+                                     htmlOutput("cird"), #crude rate difference output
+                                     br(),
+                                     br(),
+                                     htmlOutput("sird"),#summary rate difference output
+                                     br(),
+                                     br(),
+                                     plotOutput("ird", height = "200px")) #rate difference plot
+                                 ))
                   ),
 
-############################################################################################################# 
+#############################################################################################################
 #panel 3 for other calculations
                   navbarMenu("Others",
-                             #odds ratio tab 
+                             #odds ratio tab
                              tabPanel(title = "Odds Ratio",
                                 sidebarLayout(
                                   sidebarPanel(
                                     textInput("a5", "exposed people with disease"),
                                     textInput("b5", "unexposed people with disease"),
-                                    textInput("c5", "exposed person time"),
-                                    textInput("d5", "unexposed person time"),
+                                    textInput("c5", "exposed people without disease"),
+                                    textInput("d5", "unexposed people without disase"),
                                     submitButton("Show Odds Ratio")
                                   ),
                                   mainPanel = (htmlOutput("or"))
                                 )),
-                             
+
                              #AR tab
                              tabPanel(title = "AR",
                                       sidebarLayout(
                                         sidebarPanel(
                                           textInput("a9", "exposed people with disease"),
                                           textInput("b9", "unexposed people with disease"),
-                                          textInput("c9", "exposed person time"),
-                                          textInput("d9", "unexposed person time"),
+                                          textInput("c9", "exposed people without disease"),
+                                          textInput("d9", "unexposed people without disase"),
                                           submitButton("Show AR")
                                         ),
                                         mainPanel = (htmlOutput("ar"))
                                       )),
-                             
+
                              #AR% tab
                              tabPanel(title = "AR%",
                                       sidebarLayout(
                                         sidebarPanel(
                                           textInput("a6", "exposed people with disease"),
                                           textInput("b6", "unexposed people with disease"),
-                                          textInput("c6", "exposed person time"),
-                                          textInput("d6", "unexposed person time"),
+                                          textInput("c6", "exposed people without disease"),
+                                          textInput("d6", "unexposed people without disase"),
                                           submitButton("Show AR%")  ),
                                       mainPanel = (htmlOutput("arp"))
                                       )),
-                             
+
                              #PAR tab
                              tabPanel(title = "PAR",
                                       sidebarLayout(
                                         sidebarPanel(
                                           textInput("a7", "exposed people with disease"),
                                           textInput("b7", "unexposed people with disease"),
-                                          textInput("c7", "exposed person time"),
-                                          textInput("d7", "unexposed person time"),
+                                          textInput("c7", "exposed people without disease"),
+                                          textInput("d7", "unexposed people without disase"),
                                           submitButton("Show PAR")
                                         ),
                                       mainPanel = (htmlOutput("par"))
                                       )),
-                             
+
                              #PAR% tab
                              tabPanel(title = "PAR%",
                                       sidebarLayout(
                                         sidebarPanel(
                                           textInput("a8", "exposed people with disease"),
                                           textInput("b8", "unexposed people with disease"),
-                                          textInput("c8", "exposed person time"),
-                                          textInput("d8", "unexposed person time"),
+                                          textInput("c8", "exposed people without disease"),
+                                          textInput("d8", "unexposed people without disase"),
                                           submitButton("Show PAR%")
                                         ),
                                       mainPanel = (htmlOutput("parp"))
                                       ))
-                             
+
                   ),
 
 #################################################################################################
                   #Graphs tab
                   tabPanel(title = "Graphs")
-                  
+
 )
 
 #end of ui function
@@ -196,20 +223,20 @@ ui <-  navbarPage(useShinyjs(),
 
 
 server <- function(input, output) ({
-  
+
 #introduction
   output$introduction<-renderText({
-    "This app was created to contain tools designed for epidemiological data 
-    analysis. The tools can show calculations risk data, person-time data, 
-    odds ratio and other common measures i.e. AR, PAR. For risk calculations, 
-    both crude and stratified data can be entered as text separated by comma. 
-    The app is able to show the estimates with CI and the comparison of crude 
-    and summary estimates. Other calculations are currently designed for crude 
-    data only. More functions such as function to perform chi-square hypothesis 
+    "This app was created to contain tools designed for epidemiological data
+    analysis. The tools can show calculations risk data, person-time data,
+    odds ratio and other common measures i.e. AR, PAR. For risk calculations,
+    both crude and stratified data can be entered as text separated by comma.
+    The app is able to show the estimates with CI and the comparison of crude
+    and summary estimates. Other calculations are currently designed for crude
+    data only. More functions such as function to perform chi-square hypothesis
     testing of homogeneity are available in the R package 'Epicalculator'. "
     })
 
-####################################################################################  
+####################################################################################
 
 #Risk ratio calculations:
 #-----------------------
@@ -225,8 +252,8 @@ server <- function(input, output) ({
                  round(u.ci3,2), ")", sep="")
     HTML(paste(rr,'<br/>', ci3)) #final html output (<br> adds blank space)
   })
-  
-  
+
+
 #summary risk ratio
   output$srr<-renderUI({
     s.d3 <- as.numeric(unlist(strsplit(input$srr,","))) #make a vector from text input
@@ -239,10 +266,10 @@ server <- function(input, output) ({
                    round(s.u.ci3,2), ")", sep="")
     HTML(paste(s.rr,'<br/>', s.ci3)) #final html output
   })
- 
-  
-  #risk ratio plot 
-  rrPlot<-reactive({ #save the plot as a reactive object that can be used later 
+
+
+  #risk ratio plot
+  rrPlot<-reactive({ #save the plot as a reactive object that can be used later
     if (input$rr == "YES"){ #if user entered YES to show risk ratio plot
       d3 <- as.numeric(unlist(strsplit(input$crr,","))) #use input for crude RR
       a3 <- risk(d3, measure = "RR", ci = 95, estimate = "crude")
@@ -261,7 +288,7 @@ server <- function(input, output) ({
       df <- data.frame(label, mean, lower, upper) #data frame of crude and summary estimates
       # reverses the factor level ordering for labels after coord_flip()
       df$label <- factor(df$label, levels=rev(df$label))
-      
+
       #Plot of the estimates
       ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper, color=label, fill=label)) +
         geom_pointrange(shape=22, lwd = 2, size = 10) +
@@ -271,16 +298,16 @@ server <- function(input, output) ({
         ylab("Risk Ratio") +
         ggtitle("Crude and Summary Estimates") +
         theme(text = element_text(size=20),
-              plot.title = element_text(hjust = 0.5))  
+              plot.title = element_text(hjust = 0.5))
          }
   })
 
-#output the risk ratio plot  
+#output the risk ratio plot
   output$rr<-renderPlot({
     rrPlot()
   })
-  
-  
+
+
 ## download the risk ratio plot
   output$downRR <- downloadHandler(
     filename = function() {
@@ -290,7 +317,7 @@ server <- function(input, output) ({
       ggsave(file, rrPlot(), device = "png")
     }
   )
-  
+
 
 
 #risk difference calculations:
@@ -307,7 +334,7 @@ server <- function(input, output) ({
                  round(u.ci4,2), ")", sep="")
     HTML(paste(rd,'<br/>', ci4)) #final html output
   })
-  
+
   #summary RD:
   output$srd<-renderUI({
     s.d4 <- as.numeric(unlist(strsplit(input$srd,","))) #vector from text input
@@ -320,12 +347,12 @@ server <- function(input, output) ({
                    round(s.u.ci4,2), ")", sep="")
     HTML(paste(s.rd,'<br/>', s.ci4)) #final output
   })
-  
-  
+
+
   #RD plot as a reactive object that can be used later
   rdPlot<-reactive({
     if (input$rd == "YES"){ #if user entered YES to show RD plot
-      d4 <- as.numeric(unlist(strsplit(input$crd,","))) #input from crude data 
+      d4 <- as.numeric(unlist(strsplit(input$crd,","))) #input from crude data
       a4 <- risk(d4, measure = "RD", ci = 95, estimate = "crude") #crude RD
       rd <- round(as.numeric(a4[[1]][[2]]),2)
       l.ci4 <- round(a4[[2]][[1]],2)
@@ -352,15 +379,15 @@ server <- function(input, output) ({
         ylab("Risk Difference") +
         ggtitle("Crude and Summary Estimates") +
         theme(text = element_text(size=20),
-              plot.title = element_text(hjust = 0.5))  
+              plot.title = element_text(hjust = 0.5))
       }
     })
 
-#output plot for risk difference  
+#output plot for risk difference
   output$rd<-renderPlot({
     rdPlot()
   })
-  
+
 ## download the risk difference plot
   output$downRD <- downloadHandler(
     filename = function() {
@@ -370,49 +397,162 @@ server <- function(input, output) ({
       ggsave(file, rdPlot(), device = "png")
     }
   )
-  
+
 #####################################################################################
 #Person-time data ouputs
 #-----------------------
-  
-#rate ratio caclulations  
-  output$irr<-renderUI({
-    t1 <- crude.table(as.numeric(input$a1),as.numeric(input$b1),
-                      as.numeric(input$c1),as.numeric(input$d1))
-    r1 <- crude.rate(t1, measure = "IRR", ci=95)
-    HTML(r1)
-  })
-  
 
-  #rate difference caclulations   
-  output$ird<-renderUI({
-    t2 <- crude.table(as.numeric(input$a2),as.numeric(input$b2),
-                      as.numeric(input$c2),as.numeric(input$d2))
-    r2 <- crude.rate(t1, measure = "IRD", ci=95)
-    HTML(r2)
+#crude rate ratio caclulations
+
+  output$cirr <- renderUI({
+    d1 <- as.numeric(unlist(strsplit(input$cirr,","))) #make a vector from text input
+    a1 <- crude.rate(crude.table(d1[[1]],d1[[2]],d1[[3]],d1[[4]]), 95, measure = "IRR") #crude.rate finction from Epicalculator
+    HTML(a1)
   })
-  
+#summary rate ratio calculations
+  output$sirr <- renderUI({
+    s.d1 <- as.numeric(unlist(strsplit(input$sirr,","))) #make a vector from text input
+    s.a1 <- summary.rate(stratified.table(s.d1), 95, measure = "IRR") #crude.rate finction from Epicalculator
+    HTML(s.a1)
+  })
+
+#rate ratio plot
+  irrPlot<-reactive({ #save the plot as a reactive object that can be used later
+    if (input$irr == "YES"){ #if user entered YES to show rate ratio plot
+      d1 <- as.numeric(unlist(strsplit(input$cirr,","))) #use input for crude IRR
+      a1 <- crude.rate(crude.table(d1[[1]],d1[[2]],d1[[3]],d1[[4]]), 95, measure = "IRR")
+      irr <- as.numeric(sapply(strsplit(a1, " "), "[[", 2)) #crude IRR
+      l.ci1 <- as.numeric(sapply(strsplit(a1, " "), "[[", 5)) #lower CI of crude IRR
+      u.ci1 <- as.numeric(sapply(strsplit(a1, " "), "[[", 7)) #upper CI of crude IRR
+      s.d1 <- as.numeric(unlist(strsplit(input$sirr,","))) #use input for summary IRR
+      s.a1 <- summary.rate(stratified.table(s.d1), 95, measure = "IRR")
+      s.irr <- as.numeric(sapply(strsplit(s.a1, " "), "[[", 3)) #summary IRR
+      s.l.ci1 <-  as.numeric(sapply(strsplit(s.a1, " "), "[[", 6)) #lower CI of summary IRR
+      s.u.ci1 <-  as.numeric(sapply(strsplit(s.a1, " "), "[[", 8))  #upper CI of summary IRR
+      label <- c("Crude", "Summary") #combine crude and summary irr estimates (label)
+      mean  <- c(irr, s.irr)           #combine crude and summary irr estimates (IRR)
+      lower <- c(l.ci1, s.l.ci1)     #combine crude and summary irr estimates (lower CI)
+      upper <- c(u.ci1, s.u.ci1)     #combine crude and summary irr estimates (upper CI)
+      df <- data.frame(label, mean, lower, upper) #data frame of crude and summary estimates
+      # reverses the factor level ordering for labels after coord_flip()
+      df$label <- factor(df$label, levels=rev(df$label))
+
+      #Plot of the estimates
+      ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper, color=label, fill=label)) +
+        geom_pointrange(shape=22, lwd = 2, size = 10) +
+        geom_hline(aes(yintercept = 1), lty=4) +  # add a dotted line at x=1 after flip
+        coord_flip() +  # flip coordinates (puts labels on y axis)
+        xlab("") +
+        ylab("Rate Ratio") +
+        ggtitle("Crude and Summary Estimates") +
+        theme(text = element_text(size=20),
+              plot.title = element_text(hjust = 0.5))
+    }
+  })
+
+  #output the risk ratio plot
+  output$irr<-renderPlot({
+    irrPlot()
+  })
+
+  ## download the risk ratio plot
+  output$downIRR <- downloadHandler(
+    filename = function() {
+      paste('Rate-Ratio-Plot', irrPlot(), '.png', sep='')
+    },
+    content = function(file) {
+      ggsave(file, irrPlot(), device = "png")
+    }
+  )
+
+
+
+
+  #crude rate difference caclulations
+
+  output$cird <- renderUI({
+    d2 <- as.numeric(unlist(strsplit(input$cird,","))) #make a vector from text input
+    a2 <- crude.rate(crude.table(d2[[1]],d2[[2]],d2[[3]],d2[[4]]), 95, measure = "IRD") #crude.rate finction from Epicalculator
+    HTML(a2)
+  })
+  #summary rate difference calculations
+  output$sird <- renderUI({
+    s.d2 <- as.numeric(unlist(strsplit(input$sird,","))) #make a vector from text input
+    s.a2 <- summary.rate(stratified.table(s.d2), 95, measure = "IRD") #crude.rate finction from Epicalculator
+    HTML(s.a2)
+  })
+
+  #rate difference plot
+  irdPlot<-reactive({ #save the plot as a reactive object that can be used later
+    if (input$ird == "YES"){ #if user entered YES to show rate ratio plot
+      d2 <- as.numeric(unlist(strsplit(input$cird,","))) #use input for crude IRD
+      a2 <- crude.rate(crude.table(d2[[1]],d2[[2]],d2[[3]],d2[[4]]), 95, measure = "IRD")
+      ird <- as.numeric(sapply(strsplit(a2, " "), "[[", 2)) #crude IRD
+      l.ci2 <- as.numeric(sapply(strsplit(a2, " "), "[[", 5)) #lower CI of crude IRD
+      u.ci2 <- as.numeric(sapply(strsplit(a2, " "), "[[", 7)) #upper CI of crude IRD
+      s.d2 <- as.numeric(unlist(strsplit(input$sird,","))) #use input for summary IRD
+      s.a2 <- summary.rate(stratified.table(s.d2), 95, measure = "IRD")
+      s.ird <- as.numeric(sapply(strsplit(s.a2, " "), "[[", 3)) #summary IRD
+      s.l.ci2 <-  as.numeric(sapply(strsplit(s.a2, " "), "[[", 6)) #lower CI of summary IRD
+      s.u.ci2 <-  as.numeric(sapply(strsplit(s.a2, " "), "[[", 8))  #upper CI of summary IRD
+      label <- c("Crude", "Summary") #combine crude and summary ird estimates (label)
+      mean  <- c(ird, s.ird)           #combine crude and summary ird estimates (IRD)
+      lower <- c(l.ci2, s.l.ci2)     #combine crude and summary ird estimates (lower CI)
+      upper <- c(u.ci2, s.u.ci2)     #combine crude and summary ird estimates (upper CI)
+      df <- data.frame(label, mean, lower, upper) #data frame of crude and summary estimates
+      # reverses the factor level ordering for labels after coord_flip()
+      df$label <- factor(df$label, levels=rev(df$label))
+
+      #Plot of the estimates
+      ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper, color=label, fill=label)) +
+        geom_pointrange(shape=22, lwd = 2, size = 10) +
+        geom_hline(aes(yintercept = 1), lty=4) +  # add a dotted line at x=1 after flip
+        coord_flip() +  # flip coordinates (puts labels on y axis)
+        xlab("") +
+        ylab("Rate Difference") +
+        ggtitle("Crude and Summary Estimates") +
+        theme(text = element_text(size=20),
+              plot.title = element_text(hjust = 0.5))
+    }
+  })
+
+  #output the risk ratio plot
+  output$ird<-renderPlot({
+    irdPlot()
+  })
+
+  ## download the risk ratio plot
+  output$downIRD <- downloadHandler(
+    filename = function() {
+      paste('Rate-Difference-Plot', irrPlot(), '.png', sep='')
+    },
+    content = function(file) {
+      ggsave(file, irdPlot(), device = "png")
+    }
+  )
+
+
 ##################################################################################################
 #Others output
 #-------------
-  
-#odds ratio  
+
+#odds ratio
   output$or<-renderUI({
     t5 <- tablex(as.numeric(input$a5),as.numeric(input$b5),
                  as.numeric(input$c5),as.numeric(input$d5))
     r5 <- OR(t5)
     HTML(r5)
   })
-  
-# AR% 
+
+# AR%
   output$arp<-renderUI({
     t6 <- tablex(as.numeric(input$a6),as.numeric(input$b6),
                  as.numeric(input$c6),as.numeric(input$d6))
     r6 <- ARpercent(t6)
     HTML(r6)
   })
- 
-#PAR   
+
+#PAR
   output$par<-renderUI({
     t7 <- tablex(as.numeric(input$a7),as.numeric(input$b7),
                  as.numeric(input$c7),as.numeric(input$d7))
@@ -420,23 +560,23 @@ server <- function(input, output) ({
     HTML(r7)
   })
 
-#PAR%    
+#PAR%
   output$parp<-renderUI({
     t8 <- tablex(as.numeric(input$a8),as.numeric(input$b8),
                  as.numeric(input$c8),as.numeric(input$d8))
     r8 <- PARpercent(t8)
     HTML(r8)
   })
-    
 
-#AR 
+
+#AR
      output$ar<-renderUI({
       t9 <- tablex(as.numeric(input$a9),as.numeric(input$b9),
                    as.numeric(input$c9),as.numeric(input$d9))
       r9 <- AR(t9)
       HTML(r9)
     })
- 
+
 }) #end of server function
 
 
