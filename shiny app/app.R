@@ -1,10 +1,19 @@
 #install Epicalculator package first by using following code
 #devtools::install_github("PHP2560-Statistical-Programming-R/r-package-episquad-2-0")
-library(shiny)
-library(shinyjs)
-library(Epicalculator)
-library(ggplot2)
-library(shinythemes)
+
+
+#check, install and load the required packages if already not installed
+check_package <- function(names){
+  for(name in names)
+  {
+    if (!(name %in% installed.packages()))
+      install.packages(name, repos="http://cran.us.r-project.org")
+
+    library(name, character.only=TRUE)
+  }
+}
+check_package(c("shiny", "shinyjs", "shinythemes", "ggplot2"))
+
 ui <-  navbarPage(useShinyjs(),
                   theme = shinytheme("journal"),
                   #hide the error message in the app
