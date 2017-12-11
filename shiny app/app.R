@@ -1,6 +1,6 @@
 #install Epicalculator package first by using following code
-#devtools::install_github("PHP2560-Statistical-Programming-R/r-package-episquad-2-0")
-
+devtools::install_github("PHP2560-Statistical-Programming-R/r-package-episquad-2-0")
+library(Epicalculator)
 
 
 #check, install and load the required packages if already not installed
@@ -9,7 +9,7 @@ check_package <- function(names){
   {
     if (!(name %in% installed.packages()))
       install.packages(name, repos="http://cran.us.r-project.org")
-    
+
     library(name, character.only=TRUE)
   }
 }
@@ -23,21 +23,21 @@ ui <-  navbarPage(useShinyjs(),
                            ".shiny-output-error { visibility: hidden; }",
                            ".shiny-output-error:before { visibility: hidden; }"
                          )),
-                  
+
                   #Title of the app
                   title = "Epi Wizard",
-                  
+
                   #introduction panel for description of the app
                   tabPanel("Introduction",
                            verbatimTextOutput("introduction")),
-                  
+
                   #creating 4 navgation panel for rate data, risk data, others and graphs
                   #inside each navigation panel we will have tabpanel for different measures
                   #i.e.RR and RD
                   #inside the tab we will use sidebarlayout with sideparpanel for input
                   #and mainpanel for output
-                  
-                  
+
+
                   ###########################################################################################################
                   #panel 1 for risk ratio and difference
                   navbarMenu("Risk data",
@@ -64,7 +64,7 @@ ui <-  navbarPage(useShinyjs(),
                                           br(),
                                           plotOutput("rr", height = "200px")) #risk ratio plot
                                       )),
-                             
+
                              #risk difference tab
                              tabPanel("Risk Difference",
                                       sidebarLayout(
@@ -89,8 +89,8 @@ ui <-  navbarPage(useShinyjs(),
                                           plotOutput("rd", height = "200px"))#risk difference plot
                                       ))
                   ),
-                  
-                  
+
+
                   ################################################################################################################
                   #panel 2 for rate ratio and difference
                   navbarMenu("Person-Time data",
@@ -117,7 +117,7 @@ ui <-  navbarPage(useShinyjs(),
                                           br(),
                                           plotOutput("irr", height = "200px")) #rate ratio plot
                                       )),
-                             
+
                              #rate Difference tab
                              tabPanel("Rate Difference",
                                       sidebarLayout(
@@ -142,7 +142,7 @@ ui <-  navbarPage(useShinyjs(),
                                           plotOutput("ird", height = "200px")) #rate difference plot
                                       ))
                   ),
-                  
+
                   #############################################################################################################
                   #panel 3 for other calculations
                   navbarMenu("Others",
@@ -164,8 +164,8 @@ ui <-  navbarPage(useShinyjs(),
                                           br(),
                                           plotOutput('orp', height = "200px")) #odds ratio plot
                                       )),
-                            
-                             
+
+
                              #AR tab
                              tabPanel(title = "AR",
                                       sidebarLayout(
@@ -185,7 +185,7 @@ ui <-  navbarPage(useShinyjs(),
                                           br(),
                                           plotOutput('arplot', height = "200px"))
                                       )),
-                             
+
                              #AR% tab
                              tabPanel(title = "AR%",
                                       sidebarLayout(
@@ -205,7 +205,7 @@ ui <-  navbarPage(useShinyjs(),
                                           br(),
                                           plotOutput('ard', height = "200px"))
                                       )),
-                             
+
                              #PAR tab
                              tabPanel(title = "PAR",
                                       sidebarLayout(
@@ -225,7 +225,7 @@ ui <-  navbarPage(useShinyjs(),
                                           br(),
                                           plotOutput('parplot', height = "200px"))
                                       )),
-                             
+
                              #PAR% tab
                              tabPanel(title = "PAR%",
                                       sidebarLayout(
@@ -245,13 +245,11 @@ ui <-  navbarPage(useShinyjs(),
                                           br(),
                                           plotOutput('parpplot', height = "200px"))
                                       ))
-                             
-                  ),
-                  
+
+                  )
+
                   #################################################################################################
-                  #Graphs tab
-                  tabPanel(title = "Graphs")
-                  
+
 )
 
 #end of ui function
@@ -272,20 +270,20 @@ server <- function(input, output)({
   #introduction
   output$introduction<-renderText({
     "Welcome to the Epi Wizard!
-    
-    Epi Wizard is an interactive app using the newly designed 'Epicalculator' package. This app contains tools 
-    specifically designed for epidemiological data analysis. We've thoughtfully included calculators for risk 
-    data, person-time data, odds ratio measurements and other common measurement parameters (i.e. Attributable 
+
+    Epi Wizard is an interactive app using the newly designed 'Epicalculator' package. This app contains tools
+    specifically designed for epidemiological data analysis. We've thoughtfully included calculators for risk
+    data, person-time data, odds ratio measurements and other common measurement parameters (i.e. Attributable
     Risk and Population Attributable Risk).
-    
+
     For risk calculations, both crude and stratified data can be entered as text separated by commas. The app
     is designed to output the estimated effects with 95% confidence intervals and provide a graphical comparison
-    of crude and summary estimates. Other applications are available for crude data calculations. More functions 
+    of crude and summary estimates. Other applications are available for crude data calculations. More functions
     such as chi-square hypothesis testing of homogeneity are available in the R package 'Epicalculator'."
   })
-  
+
   ####################################################################################
-  
+
   #Risk ratio calculations:
   #-----------------------
   #crude risk ratio
@@ -300,8 +298,8 @@ server <- function(input, output)({
                  round(u.ci3,2), ")", sep="")
     HTML(paste(rr,'<br/>', ci3)) #final html output (<br> adds blank space)
   })
-  
-  
+
+
   #summary risk ratio
   output$srr<-renderUI({
     s.d3 <- as.numeric(unlist(strsplit(input$srr,","))) #make a vector from text input
@@ -314,8 +312,8 @@ server <- function(input, output)({
                    round(s.u.ci3,2), ")", sep="")
     HTML(paste(s.rr,'<br/>', s.ci3)) #final html output
   })
-  
-  
+
+
   #risk ratio plot
   rrPlot<-reactive({ #save the plot as a reactive object that can be used later
     if (input$rr == "YES"){ #if user entered YES to show risk ratio plot
@@ -336,7 +334,7 @@ server <- function(input, output)({
       df <- data.frame(label, mean, lower, upper) #data frame of crude and summary estimates
       # reverses the factor level ordering for labels after coord_flip()
       df$label <- factor(df$label, levels=rev(df$label))
-      
+
       #Plot of the estimates
       ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper, color=label, fill=label)) +
         geom_pointrange(shape=22, lwd = 2, size = 10, fill="white") +
@@ -350,13 +348,13 @@ server <- function(input, output)({
               plot.title = element_text(hjust = 0.5))
     }
   })
-  
+
   #output the risk ratio plot
   output$rr<-renderPlot({
     rrPlot()
   })
-  
-  
+
+
   ## download the risk ratio plot
   output$downRR <- downloadHandler(
     filename = function() {
@@ -366,9 +364,9 @@ server <- function(input, output)({
       ggsave(file, rrPlot(), device = "png")
     }
   )
-  
-  
-  
+
+
+
   #risk difference calculations:
   #-----------------------------
   #crude RD :
@@ -383,7 +381,7 @@ server <- function(input, output)({
                  round(u.ci4,2), ")", sep="")
     HTML(paste(rd,'<br/>', ci4)) #final html output
   })
-  
+
   #summary RD:
   output$srd<-renderUI({
     s.d4 <- as.numeric(unlist(strsplit(input$srd,","))) #vector from text input
@@ -396,8 +394,8 @@ server <- function(input, output)({
                    round(s.u.ci4,2), ")", sep="")
     HTML(paste(s.rd,'<br/>', s.ci4)) #final output
   })
-  
-  
+
+
   #RD plot as a reactive object that can be used later
   rdPlot<-reactive({
     if (input$rd == "YES"){ #if user entered YES to show RD plot
@@ -421,10 +419,10 @@ server <- function(input, output)({
       df$label <- factor(df$label, levels=rev(df$label))
       #plot of crude and summary RD
       ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper, color=label, fill=label)) +
-        geom_pointrange(shape=22, lwd = 2, size = 10) +
-        geom_hline(aes(yintercept = 1), lty=4) + # add a dotted line at x=1 after flip
+        geom_pointrange(shape=22, lwd = 2, size = 10, fill="white") +
+        geom_hline(aes(yintercept = 1), lty=4) +  # add a dotted line at x=1 after flip
+        coord_flip() + # flip coordinates (puts labels on y axis)
         scale_color_manual(values=c("darkgoldenrod3", "coral")) +
-        coord_flip() +  # flip coordinates (puts labels on y axis)
         xlab("") +
         ylab("Risk Difference") +
         ggtitle("Crude and Summary Estimates") +
@@ -432,12 +430,12 @@ server <- function(input, output)({
               plot.title = element_text(hjust = 0.5))
     }
   })
-  
+
   #output plot for risk difference
   output$rd<-renderPlot({
     rdPlot()
   })
-  
+
   ## download the risk difference plot
   output$downRD <- downloadHandler(
     filename = function() {
@@ -447,13 +445,13 @@ server <- function(input, output)({
       ggsave(file, rdPlot(), device = "png")
     }
   )
-  
+
   #####################################################################################
   #Person-time data ouputs
   #-----------------------
-  
+
   #crude rate ratio caclulations
-  
+
   output$cirr <- renderUI({
     d1 <- as.numeric(unlist(strsplit(input$cirr,","))) #make a vector from text input
     a1 <- crude.rate(crude.table(d1[[1]],d1[[2]],d1[[3]],d1[[4]]), 95, measure = "IRR") #crude.rate finction from Epicalculator
@@ -465,7 +463,7 @@ server <- function(input, output)({
     s.a1 <- summary.rate(stratified.table(s.d1), 95, measure = "IRR") #crude.rate finction from Epicalculator
     HTML(s.a1)
   })
-  
+
   #rate ratio plot
   irrPlot<-reactive({ #save the plot as a reactive object that can be used later
     if (input$irr == "YES"){ #if user entered YES to show rate ratio plot
@@ -486,12 +484,13 @@ server <- function(input, output)({
       df <- data.frame(label, mean, lower, upper) #data frame of crude and summary estimates
       # reverses the factor level ordering for labels after coord_flip()
       df$label <- factor(df$label, levels=rev(df$label))
-      
+
       #Plot of the estimates
       ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper, color=label, fill=label)) +
         geom_pointrange(shape=22, lwd = 2, size = 10, fill="white") +
         geom_hline(aes(yintercept = 1), lty=4) +  # add a dotted line at x=1 after flip
         coord_flip() +  # flip coordinates (puts labels on y axis)
+        scale_color_manual(values=c("darkgoldenrod3", "coral")) +
         xlab("") +
         ylab("Rate Ratio") +
         ggtitle("Crude and Summary Estimates") +
@@ -499,13 +498,13 @@ server <- function(input, output)({
               plot.title = element_text(hjust = 0.5))
     }
   })
-  
-  #output the risk ratio plot
+
+  #output the rate ratio plot
   output$irr<-renderPlot({
     irrPlot()
   })
-  
-  ## download the risk ratio plot
+
+  ## download the rate ratio plot
   output$downIRR <- downloadHandler(
     filename = function() {
       paste('Rate-Ratio-Plot', irrPlot(), '.png', sep='')
@@ -514,12 +513,12 @@ server <- function(input, output)({
       ggsave(file, irrPlot(), device = "png")
     }
   )
-  
-  
-  
-  
+
+
+
+
   #crude rate difference caclulations
-  
+
   output$cird <- renderUI({
     d2 <- as.numeric(unlist(strsplit(input$cird,","))) #make a vector from text input
     a2 <- crude.rate(crude.table(d2[[1]],d2[[2]],d2[[3]],d2[[4]]), 95, measure = "IRD") #crude.rate finction from Epicalculator
@@ -531,7 +530,7 @@ server <- function(input, output)({
     s.a2 <- summary.rate(stratified.table(s.d2), 95, measure = "IRD") #crude.rate finction from Epicalculator
     HTML(s.a2)
   })
-  
+
   #rate difference plot
   irdPlot<-reactive({ #save the plot as a reactive object that can be used later
     if (input$ird == "YES"){ #if user entered YES to show rate ratio plot
@@ -552,12 +551,13 @@ server <- function(input, output)({
       df <- data.frame(label, mean, lower, upper) #data frame of crude and summary estimates
       # reverses the factor level ordering for labels after coord_flip()
       df$label <- factor(df$label, levels=rev(df$label))
-      
+
       #Plot of the estimates
       ggplot(data=df, aes(x=label, y=mean, ymin=lower, ymax=upper, color=label, fill=label)) +
-        geom_pointrange(shape=22, lwd = 2, size = 10) +
+        geom_pointrange(shape=22, lwd = 2, size = 10,fill="white") +
         geom_hline(aes(yintercept = 1), lty=4) +  # add a dotted line at x=1 after flip
         coord_flip() +  # flip coordinates (puts labels on y axis)
+        scale_color_manual(values=c("darkgoldenrod3", "coral")) +
         xlab("") +
         ylab("Rate Difference") +
         ggtitle("Crude and Summary Estimates") +
@@ -565,12 +565,12 @@ server <- function(input, output)({
               plot.title = element_text(hjust = 0.5))
     }
   })
-  
+
   #output the risk ratio plot
   output$ird<-renderPlot({
     irdPlot()
   })
-  
+
   ## download the risk ratio plot
   output$downIRD <- downloadHandler(
     filename = function() {
@@ -580,12 +580,12 @@ server <- function(input, output)({
       ggsave(file, irdPlot(), device = "png")
     }
   )
-  
-  
+
+
   ##################################################################################################
   #Others output
   #-------------
-  
+
   #odds ratio
   output$ord<-renderUI({
     t5 <- tablex(as.numeric(input$a5),as.numeric(input$b5),
@@ -604,8 +604,8 @@ server <- function(input, output)({
       lower <- as.numeric(exp(x - (qnorm(z) * se)))
       label<- ""
       df5<- data.frame(label, oddsratio, lower, upper)
-      ggplot(data=df5, aes(x=label, y= oddsratio)) + 
-        theme_minimal()+ 
+      ggplot(data=df5, aes(x=label, y= oddsratio)) +
+        theme_minimal()+
         geom_errorbar(aes(ymax=upper, ymin= lower),width=0.15, size=1.1, color="cadetblue") +
         geom_point(size=10, shape=22, fill="white") +
         xlab("") +
@@ -620,7 +620,7 @@ server <- function(input, output)({
     })
   # AR%
   output$arp<-renderUI({
-    t6 <-  tablex(as.numeric(input$a6),as.numeric(input$b6), 
+    t6 <-  tablex(as.numeric(input$a6),as.numeric(input$b6),
                   as.numeric(input$c6),as.numeric(input$d6))
     r6 <- ARpercent(t6)
     HTML(r6)
@@ -642,29 +642,29 @@ server <- function(input, output)({
         lower <- as.numeric(ARpercent - ARpercent*(qnorm(z)*se/AR))
         label<- ""
         df6<- data.frame(label, ARpercent, lower, upper)
-        ggplot(data=df6, aes(x=label, y= ARpercent)) + 
-          theme_minimal()+ 
+        ggplot(data=df6, aes(x=label, y= ARpercent)) +
+          theme_minimal()+
           geom_errorbar(aes(ymax=upper, ymin= lower),width=0.15, size=1, color="cadetblue") +
           geom_point(size=10, shape=22, fill="white") +
           xlab("") +
           ylab("Attributable Risk Percent") +
           ggtitle("Attributalbe Risk Percent Estimate\nwith 95% Confidence Interval") +
-          coord_flip() 
+          coord_flip()
       }
   })
-    
+
     #output the risk ratio plot
     output$ard<-renderPlot({
       ardPlot()
     })
-    
+
     #PAR
     output$pardata<-renderUI({
       t7 <- tablex(as.numeric(input$a7),as.numeric(input$b7),
                    as.numeric(input$c7),as.numeric(input$d7))
       r7 <- PAR(t7)
       HTML(r7)
-    })   
+    })
     parplotPlot<-reactive({ #save the plot as a reactive object that can be used later
       if (input$parplot == "YES"){  #if user entered YES to show rate ratio plot
         PAR<- as.numeric((as.numeric(input$a7)/(as.numeric(input$a7)+as.numeric(input$c7)))-
@@ -683,14 +683,14 @@ server <- function(input, output)({
         lower <- as.numeric(PAR - (qnorm(z)*se))
         label<- ""
         df9<- data.frame(label, PAR, lower, upper)
-        ggplot(data=df9, aes(x=label, y= PAR)) + 
-          theme_minimal()+ 
+        ggplot(data=df9, aes(x=label, y= PAR)) +
+          theme_minimal()+
           geom_errorbar(aes(ymax=upper, ymin= lower),width=0.15, size=1, color="cadetblue") +
           geom_point(size=10, shape=22, fill="white") +
           xlab("") +
           ylab("Population Attributable Risk") +
           ggtitle("Population Attributable Risk Estimate\nwith 95% Confidence Interval") +
-          coord_flip() 
+          coord_flip()
       }
     })
     #output the ARplot
@@ -721,21 +721,21 @@ server <- function(input, output)({
         lower <- as.numeric(PARper - (qnorm(z)*se))
         label<- ""
         df8<- data.frame(label, PARper, lower, upper)
-        ggplot(data=df8, aes(x=label, y= PARper)) + 
-          theme_minimal()+ 
+        ggplot(data=df8, aes(x=label, y= PARper)) +
+          theme_minimal()+
           geom_errorbar(aes(ymax=upper, ymin= lower),width=0.15, size=1, color="coral") +
           geom_point(size=10, shape=22, fill="white") +
           xlab("") +
           ylab("Population Attributable Risk Percent") +
           ggtitle("Population Attributable Risk Percent Estimate\nwith 95% Confidence Interval") +
-          coord_flip() 
+          coord_flip()
       }
     })
     #output the ARplot
     output$parpplot<-renderPlot({
       parpplotPlot()
     })
-    
+
     #AR
     output$ardata<-renderUI({
       t9 <- tablex(as.numeric(input$a9),as.numeric(input$b9),
@@ -758,14 +758,14 @@ server <- function(input, output)({
         lower <- as.numeric(AR - (qnorm(z)*se))
         label<- ""
         df9<- data.frame(label, AR, lower, upper)
-        ggplot(data=df9, aes(x=label, y= AR)) + 
-          theme_minimal()+ 
+        ggplot(data=df9, aes(x=label, y= AR)) +
+          theme_minimal()+
           geom_errorbar(aes(ymax=upper, ymin= lower),width=0.15, size=1, color="cadetblue") +
           geom_point(size=10, shape=22, fill="white") +
           xlab("") +
           ylab("Attributable Risk") +
           ggtitle("Attributable Risk Estimate\nwith 95% Confidence Interval") +
-          coord_flip() 
+          coord_flip()
       }
     })
     #output the ARplot
@@ -773,6 +773,6 @@ server <- function(input, output)({
       arplotPlot()
     })
 })
- 
+
 #Final app
 shinyApp (ui = ui, server = server)
