@@ -153,7 +153,7 @@ ui <-  navbarPage(useShinyjs(),
                                           textInput("a5", "exposed with disease"),
                                           textInput("b5", "unexposed with disease"),
                                           textInput("c5", "exposed without disease"),
-                                          textInput("d5", "unexposed without disase"),
+                                          textInput("d5", "unexposed without disease"),
                                           submitButton("Show OR"),
                                           br(),#adding blank space
                                           textInput('orp', 'Show Odds Ratio Plot (enter YES or NO)')
@@ -173,7 +173,7 @@ ui <-  navbarPage(useShinyjs(),
                                           textInput("a9", "exposed with disease"),
                                           textInput("b9", "unexposed with disease"),
                                           textInput("c9", "exposed without disease"),
-                                          textInput("d9", "unexposed without disase"),
+                                          textInput("d9", "unexposed without disease"),
                                           submitButton("Show AR"),
                                           br(),#adding blank space
                                           br(), #adding blank space
@@ -193,13 +193,12 @@ ui <-  navbarPage(useShinyjs(),
                                           textInput("a6", "exposed with disease"),
                                           textInput("b6", "unexposed with disease"),
                                           textInput("c6", "exposed without disease"),
-                                          textInput("d6", "unexposed without disase"),
+                                          textInput("d6", "unexposed without disease"),
                                           submitButton("Show AR%"),
                                           br(),#adding blank space
                                           br(), #adding blank space
-                                          textInput('ard', 'Show AR% Plot (enter YES or NO)'),
-                                          #Download button for the plot
-                                          downloadButton('downARP', "Download the Plot")),
+                                          textInput('ard', 'Show AR% Plot (enter YES or NO)')
+                                        ),
                                         mainPanel(
                                           htmlOutput('arp'), #Attributal risk %
                                           br(),
@@ -211,26 +210,40 @@ ui <-  navbarPage(useShinyjs(),
                              tabPanel(title = "PAR",
                                       sidebarLayout(
                                         sidebarPanel(
-                                          textInput("a7", "exposed people with disease"),
-                                          textInput("b7", "unexposed people with disease"),
-                                          textInput("c7", "exposed people without disease"),
-                                          textInput("d7", "unexposed people without disase"),
-                                          submitButton("Show PAR")
+                                          textInput("a7", "exposed with disease"),
+                                          textInput("b7", "unexposed with disease"),
+                                          textInput("c7", "exposed without disease"),
+                                          textInput("d7", "unexposed without disease"),
+                                          submitButton("Show PAR"),
+                                          br(),#adding blank space
+                                          br(), #adding blank space
+                                          textInput('parplot', 'Show  PAR Plot (enter YES or NO)')
                                         ),
-                                        mainPanel = (htmlOutput("par"))
+                                        mainPanel(
+                                          htmlOutput('pardata'), #Attributal risk %
+                                          br(),
+                                          br(),
+                                          plotOutput('parplot', height = "200px"))
                                       )),
                              
                              #PAR% tab
                              tabPanel(title = "PAR%",
                                       sidebarLayout(
                                         sidebarPanel(
-                                          textInput("a8", "exposed people with disease"),
-                                          textInput("b8", "unexposed people with disease"),
-                                          textInput("c8", "exposed people without disease"),
-                                          textInput("d8", "unexposed people without disase"),
-                                          submitButton("Show PAR%")
+                                          textInput("a8", "exposed with disease"),
+                                          textInput("b8", "unexposed with disease"),
+                                          textInput("c8", "exposed without disease"),
+                                          textInput("d8", "unexposed without disease"),
+                                          submitButton("Show PAR%"),
+                                          br(),#adding blank space
+                                          br(), #adding blank space
+                                          textInput('parpplot', 'Show  PAR% Plot (enter YES or NO)')
                                         ),
-                                        mainPanel = (htmlOutput("parp"))
+                                        mainPanel(
+                                          htmlOutput('parpdata'), #population attributal risk %
+                                          br(),
+                                          br(),
+                                          plotOutput('parpplot', height = "200px"))
                                       ))
                              
                   ),
@@ -646,21 +659,82 @@ server <- function(input, output)({
     })
     
     #PAR
-    output$par<-renderUI({
+    output$pardata<-renderUI({
       t7 <- tablex(as.numeric(input$a7),as.numeric(input$b7),
                    as.numeric(input$c7),as.numeric(input$d7))
       r7 <- PAR(t7)
       HTML(r7)
+    })   
+    parplotPlot<-reactive({ #save the plot as a reactive object that can be used later
+      if (input$parplot == "YES"){  #if user entered YES to show rate ratio plot
+        PAR<- as.numeric((as.numeric(input$a7)/(as.numeric(input$a7)+as.numeric(input$c7)))-
+                           (as.numeric(input$b7)/(as.numeric(input$b7)+as.numeric(input$d7))))*
+          ((as.numeric(input$a7)+as.numeric(input$c7))/((as.numeric(input$a7)+
+                                                           as.numeric(input$b7)+
+                                                           as.numeric(input$c7)+
+                                                           as.numeric(input$d7))))
+        se<- sqrt((((as.numeric(input$c7)*(as.numeric(input$b7)+as.numeric(input$d7)))/
+                      (as.numeric(input$d7)*(as.numeric(input$a7)+as.numeric(input$c7))))^2)*
+                    ((as.numeric(input$a7)/
+                        (as.numeric(input$c7)*(as.numeric(input$a7)+as.numeric(input$c7))))+
+                       (as.numeric(input$b7)/(as.numeric(input$d7)*(as.numeric(input$b7)+as.numeric(input$d7))))))
+        z<- as.numeric(1-(.5*((100-95)/100)))
+        upper <- as.numeric(PAR + (qnorm(z)*se))
+        lower <- as.numeric(PAR - (qnorm(z)*se))
+        label<- ""
+        df9<- data.frame(label, PAR, lower, upper)
+        ggplot(data=df9, aes(x=label, y= PAR)) + 
+          theme_minimal()+ 
+          geom_errorbar(aes(ymax=upper, ymin= lower),width=0.15, size=1, color="cadetblue") +
+          geom_point(size=10, shape=22, fill="white") +
+          xlab("") +
+          ylab("Population Attributable Risk") +
+          ggtitle("Population Attributable Risk Estimate\nwith 95% Confidence Interval") +
+          coord_flip() 
+      }
     })
-    
+    #output the ARplot
+    output$parplot<-renderPlot({
+      parplotPlot()
+    })
     #PAR%
-    output$parp<-renderUI({
+    output$parpdata<-renderUI({
       t8 <- tablex(as.numeric(input$a8),as.numeric(input$b8),
                    as.numeric(input$c8),as.numeric(input$d8))
       r8 <- PARpercent(t8)
       HTML(r8)
     })
-    
+    parpplotPlot<-reactive({ #save the plot as a reactive object that can be used later
+      if (input$parpplot == "YES"){  #if user entered YES to show  plot
+        PARper<- (((as.numeric(input$a8)+as.numeric(input$b8))/
+                         (as.numeric(input$a8)+as.numeric(input$b8)+as.numeric(input$c8)+as.numeric(input$d8))-
+                         (as.numeric(input$b8)/(as.numeric(input$b8)+as.numeric(input$d8))))/
+                        ((as.numeric(input$a8)+as.numeric(input$b8))/
+                           (as.numeric(input$a8)+as.numeric(input$b8)+as.numeric(input$c8)+as.numeric(input$d8)))*100)
+        se<- sqrt((((as.numeric(input$c8)*(as.numeric(input$b8)+as.numeric(input$d8)))/
+                      (as.numeric(input$d8)*(as.numeric(input$a8)+as.numeric(input$c8))))^2)*
+                    ((as.numeric(input$a8)/
+                        (as.numeric(input$c8)*(as.numeric(input$a8)+as.numeric(input$c8))))+
+                       (as.numeric(input$b8)/(as.numeric(input$d8)*(as.numeric(input$b8)+as.numeric(input$d8))))))*100
+        z<- as.numeric(1-(.5*((100-95)/100)))
+        upper <- as.numeric(PARper + (qnorm(z)*se))
+        lower <- as.numeric(PARper - (qnorm(z)*se))
+        label<- ""
+        df8<- data.frame(label, PARper, lower, upper)
+        ggplot(data=df8, aes(x=label, y= PARper)) + 
+          theme_minimal()+ 
+          geom_errorbar(aes(ymax=upper, ymin= lower),width=0.15, size=1, color="coral") +
+          geom_point(size=10, shape=22, fill="white") +
+          xlab("") +
+          ylab("Population Attributable Risk Percent") +
+          ggtitle("Population Attributable Risk Percent Estimate\nwith 95% Confidence Interval") +
+          coord_flip() 
+      }
+    })
+    #output the ARplot
+    output$parpplot<-renderPlot({
+      parpplotPlot()
+    })
     
     #AR
     output$ardata<-renderUI({
@@ -694,7 +768,7 @@ server <- function(input, output)({
           coord_flip() 
       }
     })
-    #output the risk ratio plot
+    #output the ARplot
     output$arplot<-renderPlot({
       arplotPlot()
     })
