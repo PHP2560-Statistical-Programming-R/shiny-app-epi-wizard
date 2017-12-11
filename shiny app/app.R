@@ -764,7 +764,7 @@ server <- function(input, output)({
           geom_point(size=10, shape=22, fill="white") +
           xlab("") +
           ylab("Attributable Risk") +
-          ggtitle("Attributalbe Risk Estimate\nwith 95% Confidence Interval") +
+          ggtitle("Attributable Risk Estimate\nwith 95% Confidence Interval") +
           coord_flip() 
       }
     })
