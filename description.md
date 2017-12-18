@@ -1,5 +1,7 @@
 ## Epi Wizard
 
+&nbsp;
+
 ### Outline of the App:
 
 Epi Wizard is an interactive app using the newly designed 'Epicalculator' package. This app contains tools specifically designed for epidemiological data analysis. We've thoughtfully included calculators for risk data, person-time data, odds ratio measurements and other common measurement parameters (e.g. Attributable Risk and Population Attributable Risk). The app is designed to output the estimated effects with 95% confidence intervals and provide a graphical comparison of crude and summary estimates. Other applications are available for crude data calculations. More functions such as chi-square hypothesis testing of homogeneity are available in the R package 'Epicalculator'.
@@ -42,13 +44,13 @@ Summary data format is the same, just remember to use a comma to separate data f
 
 &nbsp;
 
-#### References:
+### References:
 
 * Rothman KJ, Greenland S (1998). Modern Epidemiology. Lippincott Williams, & Wilkins, Philadelphia, pp. 271.
 * Szklo M, Nieto J (2006). Epidemiology: Beyond the Basics 2nd Edition. Jones & Bartlett Learning, Burlington, MA, Appendix A.
 
 &nbsp;
 
-#### Acknowledgments:
+### Acknowledgments:
 
 * Inspired from Dr. Gregory Wellenius's spreadsheet-EPI202 Calculator
