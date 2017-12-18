@@ -12,13 +12,15 @@ title: "Introduction"
 
 * For risk calculations, both crude and stratified data can be entered as text separated by commas.
 
-      Format:
-(exposed people with disease, unexposed people with disease, exposed people without disease, unexposed people without disease)
+    Crude data format:
+(exposed people with disease, unexposed people with disease, exposed people without disease, unexposed people without disease).
+Summary data format is the same, just remember to use a comma to separate data from different stratified table.
 
 * For rate calculations, both crude and stratified data can be entered as text separated by commas.
 
-      Format:
-(exposed people with disease, unexposed people with disease, exposed person-time, unexposed person-time)
+      Crude data format:
+(exposed people with disease, unexposed people with disease, exposed person-time, unexposed person-time). 
+Summary data format is the same, just remember to use a comma to separate data from different stratified table.
 
 * The app is designed to output the estimated effects with 95% confidence intervals and provide a graphical comparison of crude and summary estimates. 
 
