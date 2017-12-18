@@ -1,15 +1,4 @@
----
-output:
-  html_document: default
-  word_document: default
----
-<center>
-# Epi Wizard
-</center>
-
-
-&nbsp; &nbsp;
-------------------------------------------------------------------------------
+## Epi Wizard
 
 ### Outline of the App:
 
@@ -25,12 +14,12 @@ Majorly Epidemiology concentrated student, researchers can also use it for some 
 
 For risk calculations, both crude and stratified data can be entered as text separated by commas.
 Crude data format
-(exposed people with disease, unexposed people with disease, exposed people without disease, unexposed people without disease)
+(exposed people with disease, unexposed people with disease, exposed people without disease, unexposed people without disease).
 Summary data format is the same, just remember to use a comma to separate data from different stratified table.
 
 For rate calculations, both crude and stratified data can be entered as text separated by commas.
 Crude data format:
-(exposed people with disease, unexposed people with disease, exposed person-time, unexposed person-time)
+(exposed people with disease, unexposed people with disease, exposed person-time, unexposed person-time).
 Summary data format is the same, just remember to use a comma to separate data from different stratified table.
 
 &nbsp;
