@@ -6,11 +6,13 @@ Epi Wizard is an interactive app using the newly designed 'Epicalculator' packag
 
 &nbsp;
 
-### Audience
+### Audience:
 
 Majorly Epidemiology concentrated student, researchers can also use it for some quick calculations.
 
-### Data Input Instruction
+&nbsp;
+
+### Data Input Instruction:
 
 For risk calculations, both crude and stratified data can be entered as text separated by commas.
 Crude data format
