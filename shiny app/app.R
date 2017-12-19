@@ -1,5 +1,5 @@
 #install Epicalculator package first by using following code
-#devtools::install_github("PHP2560-Statistical-Programming-R/r-package-episquad-2-0")
+devtools::install_github("PHP2560-Statistical-Programming-R/r-package-episquad-2-0")
 library(Epicalculator)
 
 
