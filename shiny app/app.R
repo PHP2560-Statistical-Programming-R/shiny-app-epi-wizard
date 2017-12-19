@@ -1,5 +1,5 @@
 #install Epicalculator package first by using following code
-devtools::install_github("PHP2560-Statistical-Programming-R/r-package-episquad-2-0")
+#devtools::install_github("PHP2560-Statistical-Programming-R/r-package-episquad-2-0")
 library(Epicalculator)
 
 
@@ -46,17 +46,21 @@ ui <-  navbarPage(useShinyjs(),
                                       sidebarLayout(
                                         sidebarPanel(
                                           textInput('crr', 'Enter crude data (separated by comma)'),
+                                          checkboxInput("intcrr", "Show interpretation"),
                                           submitButton("Show Crude Risk Ratio"),
                                           br(),#adding blank space
                                           textInput('srr', 'Enter summary data (separated by comma)'),
+                                          checkboxInput("intsrr", "Show interpretation"),
+                                          checkboxInput('rr', 'Show Risk Ratio Comparsion Plot', FALSE), #option for plot
                                           submitButton("Show Summary Risk Ratio"),
                                           br(), #adding blank space
-                                          textInput('rr', 'Show Risk Ratio Plot (enter YES or NO)'),
+
                                           #Download button for the plot
                                           downloadButton('downRR', "Download the Plot")
                                         ),
                                         mainPanel(
                                           htmlOutput("crr"), #crude risk ratio output
+
                                           br(),
                                           br(),
                                           htmlOutput("srr"),#ummary risk ratio output
@@ -70,12 +74,15 @@ ui <-  navbarPage(useShinyjs(),
                                       sidebarLayout(
                                         sidebarPanel(
                                           textInput('crd', 'Enter crude data (separated by comma)'),
+                                          checkboxInput('intcrd','Show Interpretation', F),
                                           submitButton("Show Crude Risk Difference"),
                                           br(),#adding blank space
                                           textInput('srd', 'Enter summary data (separated by comma)'),
+                                          checkboxInput('intsrd','Show Interpretation', F),
+                                          checkboxInput('rd', 'Show Risk Difference Comparsion Plot', F), #option for plot
                                           submitButton("Show Summary Risk Difference"),
                                           br(), #adding blank space
-                                          textInput('rd', 'Show Risk Difference Plot (enter YES or NO)'),
+
                                           #Download button for the plot
                                           downloadButton('downRD', "Download the Plot")
                                         ),
@@ -99,12 +106,15 @@ ui <-  navbarPage(useShinyjs(),
                                       sidebarLayout(
                                         sidebarPanel(
                                           textInput('cirr', 'Enter crude data (separated by comma)'),
+                                          checkboxInput("intcirr","Show Interpretation", F),
                                           submitButton("Show Crude Rate Ratio"),
                                           br(),#adding blank space
                                           textInput('sirr', 'Enter summary data (separated by comma)'),
+                                          checkboxInput("intsirr","Show Interpretation", F),
+                                          checkboxInput('irr', 'Show Rate Ratio Comparsion Plot'), #option for plot
                                           submitButton("Show Summary Rate Ratio"),
                                           br(), #adding blank space
-                                          textInput('irr', 'Show Rate Ratio Plot (enter YES or NO)'),
+
                                           #Download button for the plot
                                           downloadButton('downIRR', "Download the Plot")
                                         ),
@@ -123,12 +133,14 @@ ui <-  navbarPage(useShinyjs(),
                                       sidebarLayout(
                                         sidebarPanel(
                                           textInput('cird', 'Enter crude data (separated by comma)'),
+                                          checkboxInput("intcird","Show Interpretation", F),
                                           submitButton("Show Crude Rate Difference"),
                                           br(),#adding blank space
                                           textInput('sird', 'Enter summary data (separated by comma)'),
+                                          checkboxInput("intsird","Show Interpretation", F),
+                                          checkboxInput('ird', 'Show Rate Difference Comparsion Plot'), #option for plot
                                           submitButton("Show Summary Rate Difference"),
                                           br(), #adding blank space
-                                          textInput('ird', 'Show Rate Difference Plot (enter YES or NO)'),
                                           #Download button for the plot
                                           downloadButton('downIRD', "Download the Plot")
                                         ),
@@ -154,9 +166,11 @@ ui <-  navbarPage(useShinyjs(),
                                           textInput("b5", "unexposed with disease"),
                                           textInput("c5", "exposed without disease"),
                                           textInput("d5", "unexposed without disease"),
-                                          submitButton("Show OR"),
-                                          br(),#adding blank space
-                                          textInput('orp', 'Show Odds Ratio Plot (enter YES or NO)')
+                                          checkboxInput("intor","Show Interpretation", F),
+                                          checkboxInput('orp', 'Show Odds Ratio Plot'),
+
+                                          submitButton("Show OR")
+
                                         ),
                                         mainPanel(
                                           htmlOutput('ord'), #crude odds ratio output
@@ -174,11 +188,11 @@ ui <-  navbarPage(useShinyjs(),
                                           textInput("b9", "unexposed with disease"),
                                           textInput("c9", "exposed without disease"),
                                           textInput("d9", "unexposed without disease"),
-                                          submitButton("Show AR"),
-                                          br(),#adding blank space
-                                          br(), #adding blank space
-                                          textInput('arplot', 'Show AR Plot (enter YES or NO)')
-                                        ),
+                                          checkboxInput("intar","Show Interpretation", F),
+                                          checkboxInput('arplot', 'Show AR Plot'),
+
+                                          submitButton("Show AR")
+                                         ),
                                         mainPanel(
                                           htmlOutput('ardata'),
                                           br(),
@@ -194,10 +208,10 @@ ui <-  navbarPage(useShinyjs(),
                                           textInput("b6", "unexposed with disease"),
                                           textInput("c6", "exposed without disease"),
                                           textInput("d6", "unexposed without disease"),
-                                          submitButton("Show AR%"),
-                                          br(),#adding blank space
-                                          br(), #adding blank space
-                                          textInput('ard', 'Show AR% Plot (enter YES or NO)')
+                                          checkboxInput("intarp","Show Interpretation", F),
+                                          checkboxInput('ard', 'Show AR% Plot'),
+                                          submitButton("Show AR%")
+
                                         ),
                                         mainPanel(
                                           htmlOutput('arp'), #Attributal risk %
@@ -214,10 +228,10 @@ ui <-  navbarPage(useShinyjs(),
                                           textInput("b7", "unexposed with disease"),
                                           textInput("c7", "exposed without disease"),
                                           textInput("d7", "unexposed without disease"),
-                                          submitButton("Show PAR"),
-                                          br(),#adding blank space
-                                          br(), #adding blank space
-                                          textInput('parplot', 'Show  PAR Plot (enter YES or NO)')
+                                          checkboxInput("intpar","Show Interpretation", F),
+                                          checkboxInput('parplot', 'Show PAR Plot'),
+                                          submitButton("Show PAR")
+
                                         ),
                                         mainPanel(
                                           htmlOutput('pardata'), #Attributal risk %
@@ -234,10 +248,10 @@ ui <-  navbarPage(useShinyjs(),
                                           textInput("b8", "unexposed with disease"),
                                           textInput("c8", "exposed without disease"),
                                           textInput("d8", "unexposed without disease"),
-                                          submitButton("Show PAR%"),
-                                          br(),#adding blank space
-                                          br(), #adding blank space
-                                          textInput('parpplot', 'Show  PAR% Plot (enter YES or NO)')
+                                          checkboxInput("intparp","Show Interpretation", F),
+                                          checkboxInput('parpplot', 'Show PAR% Plot'),
+                                          submitButton("Show PAR%")
+
                                         ),
                                         mainPanel(
                                           htmlOutput('parpdata'), #population attributal risk %
@@ -287,8 +301,16 @@ server <- function(input, output)({
     rr <- paste("Crude Risk Ratio:", round(as.numeric(rr),2), " ")
     ci3 <- paste("95%CI: ", "(", round(l.ci3,2), " to ",
                  round(u.ci3,2), ")", sep="")
-    HTML(paste(rr,'<br/>', ci3)) #final html output (<br> adds blank space)
+
+    if(input$intcrr == TRUE){ #option for interpretation
+      HTML(paste(rr,'<br/>',ci3, '<br/>','<br/>', "The risk of the disease in exposed group is", round(as.numeric(a3[[1]][[2]]),2),"times the risk of the disease in unexposed group.")) #final html output (<br> adds blank space)
+
+    }
+    else {HTML(paste(rr,'<br/>', ci3))} #final html output (<br> adds blank space)
+
   })
+
+
 
 
   #summary risk ratio
@@ -301,13 +323,19 @@ server <- function(input, output)({
     s.rr <- paste("Summary Risk Ratio:", round(as.numeric(s.rr),2), " ")
     s.ci3 <- paste("95%CI: ", "(", round(s.l.ci3,2), " to ",
                    round(s.u.ci3,2), ")", sep="")
-    HTML(paste(s.rr,'<br/>', s.ci3)) #final html output
+    if(input$intsrr == TRUE){ #option for interpretation
+      HTML(paste(s.rr,'<br/>', s.ci3, '<br/>', '<br/>',"The risk of the disease in exposed group is",round(as.numeric(s.a3[[1]][[2]]),2),"times the risk of the disease in unexposed group after stratification.")) #final html output (<br> adds blank space)
+
+    }
+    else {HTML(paste(s.rr,'<br/>', s.ci3))} #final html output (<br> adds blank space)
+
+
   })
 
 
   #risk ratio plot
   rrPlot<-reactive({ #save the plot as a reactive object that can be used later
-    if (input$rr == "YES"){ #if user entered YES to show risk ratio plot
+   if(input$rr == TRUE){
       d3 <- as.numeric(unlist(strsplit(input$crr,","))) #use input for crude RR
       a3 <- risk(d3, measure = "RR", ci = 95, estimate = "crude")
       rr <- round(as.numeric(a3[[1]][[2]]),2) #crude RR
@@ -337,12 +365,12 @@ server <- function(input, output)({
         ggtitle("Crude and Summary Estimates") +
         theme(text = element_text(size=20),
               plot.title = element_text(hjust = 0.5))
-    }
+   }
   })
 
   #output the risk ratio plot
   output$rr<-renderPlot({
-    rrPlot()
+   rrPlot()
   })
 
 
@@ -370,7 +398,14 @@ server <- function(input, output)({
     rd <- paste("Crude Risk Difference:", round(as.numeric(rd),2), " ")
     ci4 <- paste("95%CI: ", "(", round(l.ci4,2), " to ",
                  round(u.ci4,2), ")", sep="")
-    HTML(paste(rd,'<br/>', ci4)) #final html output
+
+    if(input$intcrd == TRUE){#option for interpretation
+      HTML(paste(rd,'<br/>', ci4,'<br/>', '<br/>',
+"If people in exposed group had been unexposed, the risk of disease would decrease(if RD is +)/increase(if RD is -)", abs(round(as.numeric(a4[[1]][[2]]),2)),".")) #final html output
+
+    }
+    else {HTML(paste(rd,'<br/>', ci4))}
+
   })
 
   #summary RD:
@@ -383,13 +418,19 @@ server <- function(input, output)({
     s.rd <- paste("Summary Risk Difference:", round(as.numeric(s.rd),2), " ")
     s.ci4 <- paste("95%CI: ", "(", round(s.l.ci4,2), " to ",
                    round(s.u.ci4,2), ")", sep="")
-    HTML(paste(s.rd,'<br/>', s.ci4)) #final output
+
+    if(input$intsrd == TRUE){#option for interpretation
+      HTML(paste(s.rd,'<br/>', s.ci4,'<br/>', '<br/>',
+                 "If people in exposed group had been unexposed, the risk of disease would decrease(if RD is +)/increase(if RD is -)", abs(round(as.numeric(s.a4[[1]][[2]]),2))," after stratification.")) #final html output
+
+    }
+    else {HTML(paste(s.rd,'<br/>', s.ci4))}
   })
 
 
   #RD plot as a reactive object that can be used later
   rdPlot<-reactive({
-    if (input$rd == "YES"){ #if user entered YES to show RD plot
+    if (input$rd == TRUE){ #if user check to show RD plot
       d4 <- as.numeric(unlist(strsplit(input$crd,","))) #input from crude data
       a4 <- risk(d4, measure = "RD", ci = 95, estimate = "crude") #crude RD
       rd <- round(as.numeric(a4[[1]][[2]]),2)
@@ -446,18 +487,27 @@ server <- function(input, output)({
   output$cirr <- renderUI({
     d1 <- as.numeric(unlist(strsplit(input$cirr,","))) #make a vector from text input
     a1 <- crude.rate(crude.table(d1[[1]],d1[[2]],d1[[3]],d1[[4]]), 95, measure = "IRR") #crude.rate finction from Epicalculator
-    HTML(a1)
+    irr <- as.numeric(sapply(strsplit(a1, " "), "[[", 2)) #crude IRR
+    if(input$intcirr == TRUE){
+      HTML(paste(a1,'<br/>','<br/>',"The incidence rate in the exposed group is", irr, "times the incidence rate in the unexposed group."))
+    } else{
+    HTML(a1)}
   })
   #summary rate ratio calculations
   output$sirr <- renderUI({
     s.d1 <- as.numeric(unlist(strsplit(input$sirr,","))) #make a vector from text input
     s.a1 <- summary.rate(stratified.table(s.d1), 95, measure = "IRR") #crude.rate finction from Epicalculator
-    HTML(s.a1)
+    s.irr <- as.numeric(sapply(strsplit(s.a1, " "), "[[", 3)) #summary IRR
+    if(input$intsirr == TRUE){
+      HTML(paste(s.a1,'<br/>','<br/>',"The incidence rate in the exposed group is", s.irr, "times the incidence rate in the unexposed group after stratification."))
+    } else{
+      HTML(s.a1)}
   })
+
 
   #rate ratio plot
   irrPlot<-reactive({ #save the plot as a reactive object that can be used later
-    if (input$irr == "YES"){ #if user entered YES to show rate ratio plot
+    if (input$irr == TRUE){ #if user check to show rate ratio plot
       d1 <- as.numeric(unlist(strsplit(input$cirr,","))) #use input for crude IRR
       a1 <- crude.rate(crude.table(d1[[1]],d1[[2]],d1[[3]],d1[[4]]), 95, measure = "IRR")
       irr <- as.numeric(sapply(strsplit(a1, " "), "[[", 2)) #crude IRR
@@ -513,18 +563,34 @@ server <- function(input, output)({
   output$cird <- renderUI({
     d2 <- as.numeric(unlist(strsplit(input$cird,","))) #make a vector from text input
     a2 <- crude.rate(crude.table(d2[[1]],d2[[2]],d2[[3]],d2[[4]]), 95, measure = "IRD") #crude.rate finction from Epicalculator
-    HTML(a2)
+    ird <- as.numeric(sapply(strsplit(a2, " "), "[[", 2)) #crude IRD
+    if(input$intcird == TRUE){
+      HTML(paste(a2,'<br/>','<br/>',
+                 "If people in exposed group had been unexposed, the incidence rate of disease would decrease(if RD is +)/increase(if RD is -)"
+                 , ird, "."))
+    }else{
+      HTML(a2)
+    }
+
+
   })
   #summary rate difference calculations
   output$sird <- renderUI({
     s.d2 <- as.numeric(unlist(strsplit(input$sird,","))) #make a vector from text input
     s.a2 <- summary.rate(stratified.table(s.d2), 95, measure = "IRD") #crude.rate finction from Epicalculator
+    s.ird <- as.numeric(sapply(strsplit(s.a2, " "), "[[", 3)) #summary IRD
     HTML(s.a2)
-  })
-
+    if(input$intsird == TRUE){
+      HTML(paste(s.a2,'<br/>','<br/>',
+                 "If people in exposed group had been unexposed, the incidence rate of disease would decrease(if RD is +)/increase(if RD is -)"
+                 , s.ird, " after stratification."))
+    }else{
+      HTML(s.a2)
+  }
+})
   #rate difference plot
   irdPlot<-reactive({ #save the plot as a reactive object that can be used later
-    if (input$ird == "YES"){ #if user entered YES to show rate ratio plot
+    if (input$ird == TRUE){ #if user check to show rate ratio plot
       d2 <- as.numeric(unlist(strsplit(input$cird,","))) #use input for crude IRD
       a2 <- crude.rate(crude.table(d2[[1]],d2[[2]],d2[[3]],d2[[4]]), 95, measure = "IRD")
       ird <- as.numeric(sapply(strsplit(a2, " "), "[[", 2)) #crude IRD
@@ -582,10 +648,16 @@ server <- function(input, output)({
     t5 <- tablex(as.numeric(input$a5),as.numeric(input$b5),
                  as.numeric(input$c5),as.numeric(input$d5))
     r5 <- OR(t5)
+    oddsratio<- as.numeric(((as.numeric(input$a5)*as.numeric(input$d5))/(as.numeric(input$b5)*as.numeric(input$c5))))
+    if(input$intor == TRUE){
+      HTML(r5,'<br/>','<br/>', "The odds of having the disease in exposed group is", round(oddsratio,2),
+           "times the odds of having the disease in unexposed group.")
+    }else{
     HTML(r5)
+    }
     })
   orpPlot<-reactive({ #save the plot as a reactive object that can be used later
-    if (input$orp == "YES"){  #if user entered YES to show plot
+    if (input$orp == TRUE){  #if user check to show plot
       x<- as.numeric(log((as.numeric(input$a5)*as.numeric(input$d5))/(as.numeric(input$b5)*as.numeric(input$c5))))
       oddsratio<- as.numeric(((as.numeric(input$a5)*as.numeric(input$d5))/(as.numeric(input$b5)*as.numeric(input$c5))))
       var<- as.numeric(((1/as.numeric(input$a5))+(1/as.numeric(input$b5))+(1/as.numeric(input$c5))+(1/as.numeric(input$d5))))
@@ -605,7 +677,7 @@ server <- function(input, output)({
         coord_flip()
       }
     })
-  #output the risk ratio plot
+  #output the odds ratio plot
   output$orp<-renderPlot({
     orpPlot()
     })
@@ -614,11 +686,18 @@ server <- function(input, output)({
     t6 <-  tablex(as.numeric(input$a6),as.numeric(input$b6),
                   as.numeric(input$c6),as.numeric(input$d6))
     r6 <- ARpercent(t6)
-    HTML(r6)
+    AR<- as.numeric((as.numeric(input$a6)/(as.numeric(input$a6)+as.numeric(input$c6)))-
+                      (as.numeric(input$b6)/(as.numeric(input$b6)+as.numeric(input$d6))))
+    ARpercent<- as.numeric(AR/(as.numeric(input$a6)/(as.numeric(input$a6)+as.numeric(input$c6)))*100)
+    if(input$intarp == TRUE){
+      HTML(paste(r6,'<br/>','<br/>',
+                 "Among exposed individuals,",round(ARpercent,2),"% of the disease cases are attributed to exposure."))
+    }else{
+    HTML(r6)}
   })
   # Plot
   ardPlot<-reactive({ #save the plot as a reactive object that can be used later
-      if (input$ard == "YES"){  #if user entered YES to show  plot
+      if (input$ard == TRUE){  #if user check to show  plot
         AR<- as.numeric((as.numeric(input$a6)/(as.numeric(input$a6)+as.numeric(input$c6)))-
                           (as.numeric(input$b6)/(as.numeric(input$b6)+as.numeric(input$d6))))
         ARpercent<- as.numeric(AR/(as.numeric(input$a6)/(as.numeric(input$a6)+as.numeric(input$c6)))*100)
@@ -644,7 +723,7 @@ server <- function(input, output)({
       }
   })
 
-    #output the risk ratio plot
+    #output the AR% plot
     output$ard<-renderPlot({
       ardPlot()
     })
@@ -654,10 +733,21 @@ server <- function(input, output)({
       t7 <- tablex(as.numeric(input$a7),as.numeric(input$b7),
                    as.numeric(input$c7),as.numeric(input$d7))
       r7 <- PAR(t7)
-      HTML(r7)
+      PAR<- as.numeric((as.numeric(input$a7)/(as.numeric(input$a7)+as.numeric(input$c7)))-
+                         (as.numeric(input$b7)/(as.numeric(input$b7)+as.numeric(input$d7))))*
+        ((as.numeric(input$a7)+as.numeric(input$c7))/((as.numeric(input$a7)+
+                                                         as.numeric(input$b7)+
+                                                         as.numeric(input$c7)+
+                                                         as.numeric(input$d7))))
+      if(input$intpar == TRUE){
+        HTML(paste(r7,'<br/>','<br/>',
+                   "If we could change the exposure to nonexposure in the study population, we might expect the risk of disease in the study population decreases(if PAR is +)/increases(if PAR is -) by",
+                  abs(round(PAR,2)),"."))
+      }
+     else{ HTML(r7)}
     })
     parplotPlot<-reactive({ #save the plot as a reactive object that can be used later
-      if (input$parplot == "YES"){  #if user entered YES to show rate ratio plot
+      if (input$parplot == TRUE){  #if user check to show rate ratio plot
         PAR<- as.numeric((as.numeric(input$a7)/(as.numeric(input$a7)+as.numeric(input$c7)))-
                            (as.numeric(input$b7)/(as.numeric(input$b7)+as.numeric(input$d7))))*
           ((as.numeric(input$a7)+as.numeric(input$c7))/((as.numeric(input$a7)+
@@ -684,7 +774,7 @@ server <- function(input, output)({
           coord_flip()
       }
     })
-    #output the ARplot
+    #output the PARplot
     output$parplot<-renderPlot({
       parplotPlot()
     })
@@ -693,10 +783,19 @@ server <- function(input, output)({
       t8 <- tablex(as.numeric(input$a8),as.numeric(input$b8),
                    as.numeric(input$c8),as.numeric(input$d8))
       r8 <- PARpercent(t8)
-      HTML(r8)
+      PARper<- (((as.numeric(input$a8)+as.numeric(input$b8))/
+                   (as.numeric(input$a8)+as.numeric(input$b8)+as.numeric(input$c8)+as.numeric(input$d8))-
+                   (as.numeric(input$b8)/(as.numeric(input$b8)+as.numeric(input$d8))))/
+                  ((as.numeric(input$a8)+as.numeric(input$b8))/
+                     (as.numeric(input$a8)+as.numeric(input$b8)+as.numeric(input$c8)+as.numeric(input$d8)))*100)
+      if (input$intparp == TRUE){
+        HTML(paste(r8,'<br/>','<br/>', round(PARper,2),
+                   "of the disease cases in the study population is attributable to the exposure."))
+      }
+      else{HTML(r8)}
     })
     parpplotPlot<-reactive({ #save the plot as a reactive object that can be used later
-      if (input$parpplot == "YES"){  #if user entered YES to show  plot
+      if (input$parpplot == TRUE){  #if user check to show  plot
         PARper<- (((as.numeric(input$a8)+as.numeric(input$b8))/
                          (as.numeric(input$a8)+as.numeric(input$b8)+as.numeric(input$c8)+as.numeric(input$d8))-
                          (as.numeric(input$b8)/(as.numeric(input$b8)+as.numeric(input$d8))))/
@@ -732,10 +831,18 @@ server <- function(input, output)({
       t9 <- tablex(as.numeric(input$a9),as.numeric(input$b9),
                    as.numeric(input$c9),as.numeric(input$d9))
       r9 <- AR(t9)
-      HTML(r9)
+      AR<- as.numeric((as.numeric(input$a9)/(as.numeric(input$a9)+as.numeric(input$c9)))-
+                        (as.numeric(input$b9)/(as.numeric(input$b9)+as.numeric(input$d9))))
+      if(input$intar){
+        HTML(paste(r9,'<br/>','<br/>',
+                   "If people in exposed group had been unexposed, the risk of disease would decrease(if AR is +)/increase(if AR is -)",
+                   abs(round(AR,3)), "."))
+      }
+      else{
+      HTML(r9)}
     })
     arplotPlot<-reactive({ #save the plot as a reactive object that can be used later
-      if (input$arplot == "YES"){  #if user entered YES to show rate ratio plot
+      if (input$arplot == TRUE){  #if user check to show rate ratio plot
         AR<- as.numeric((as.numeric(input$a9)/(as.numeric(input$a9)+as.numeric(input$c9)))-
                           (as.numeric(input$b9)/(as.numeric(input$b9)+as.numeric(input$d9))))
         se<- as.numeric(sqrt(((1/(as.numeric(input$a9)+as.numeric(input$c9)))+
