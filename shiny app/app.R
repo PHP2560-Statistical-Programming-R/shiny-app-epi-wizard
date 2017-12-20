@@ -17,28 +17,28 @@ check_package(c("shiny", "shinyjs", "shinythemes", "ggplot2"))
 
 ui <-  navbarPage(useShinyjs(),
                   theme = shinytheme("united"),
-                  
+
                   #hide the error message in the app
                   hidden(tags$style
                          (type="text/css",
                            ".title {font-size: 20px; font-style: bold} ",
                            ".navbar {font-size: 18px} ",
                            ".shiny-html-output { font-size: 14px;
-                                                 font-style: bold; 
-                                                 color: red; 
+                                                 font-style: bold;
+                                                 color: red;
                                                  text-align:center; }",
                            "#introduction{font-size: 14px; text-align:left; color: black;}",
                            ".shiny-output-error { visibility: hidden; }",
                            ".shiny-output-error:before { visibility: hidden; }"
                          )),
-                  
+
                   #Title of the app
                   title = "Epi Wizard",
 
                   #introduction panel for description of the app
                   tabPanel("Introduction",
                            uiOutput("introduction")),
-                  
+
                   #show some example data
                   navbarMenu("Example Data",
                              tabPanel("Risk data",
@@ -48,7 +48,7 @@ ui <-  navbarPage(useShinyjs(),
                                      HTML('<center><img src="img5.jpg" height = "600" width = "900"></center>')
                             ),
                              tabPanel("Others Data",
-                                      HTML('<center><img src="img4.jpg" height = "600" width = "900"></center>')
+                                      HTML('<center><img src="img6.jpg" height = "300" width = "900"></center>')
                             )),
 
                   #creating 4 navgation panel for rate data, risk data, others and graphs
