@@ -16,20 +16,40 @@ check_package <- function(names){
 check_package(c("shiny", "shinyjs", "shinythemes", "ggplot2"))
 
 ui <-  navbarPage(useShinyjs(),
-                  theme = shinytheme("journal"),
+                  theme = shinytheme("united"),
+                  
                   #hide the error message in the app
                   hidden(tags$style
                          (type="text/css",
+                           ".title {font-size: 20px; font-style: bold} ",
+                           ".navbar {font-size: 18px} ",
+                           ".shiny-html-output { font-size: 14px;
+                                                 font-style: bold; 
+                                                 color: red; 
+                                                 text-align:center; }",
+                           "#introduction{font-size: 14px; text-align:left; color: black;}",
                            ".shiny-output-error { visibility: hidden; }",
                            ".shiny-output-error:before { visibility: hidden; }"
                          )),
-
+                  
                   #Title of the app
                   title = "Epi Wizard",
 
                   #introduction panel for description of the app
                   tabPanel("Introduction",
                            uiOutput("introduction")),
+                  
+                  #show some example data
+                  navbarMenu("Example Data",
+                             tabPanel("Risk data",
+                                      HTML('<center><img src="img4.jpg" height = "600" width = "900"></center>')
+                            ),
+                             tabPanel("Person-Time data",
+                                     HTML('<center><img src="img5.jpg" height = "600" width = "900"></center>')
+                            ),
+                             tabPanel("Others Data",
+                                      HTML('<center><img src="img4.jpg" height = "600" width = "900"></center>')
+                            )),
 
                   #creating 4 navgation panel for rate data, risk data, others and graphs
                   #inside each navigation panel we will have tabpanel for different measures
@@ -40,16 +60,16 @@ ui <-  navbarPage(useShinyjs(),
 
                   ###########################################################################################################
                   #panel 1 for risk ratio and difference
-                  navbarMenu("Risk data",
+                  navbarMenu("Risk Data",
                              #risk ratio tab
                              tabPanel("Risk Ratio",
                                       sidebarLayout(
                                         sidebarPanel(
-                                          textInput('crr', 'Enter crude data (separated by comma)'),
+                                          textInput('crr', 'Enter crude data (a, b, c, d)'),
                                           checkboxInput("intcrr", "Show interpretation"),
                                           submitButton("Show Crude Risk Ratio"),
                                           br(),#adding blank space
-                                          textInput('srr', 'Enter summary data (separated by comma)'),
+                                          textInput('srr', 'Enter summary data (a1, b1, c1, d1...)'),
                                           checkboxInput("intsrr", "Show interpretation"),
                                           checkboxInput('rr', 'Show Risk Ratio Comparsion Plot', FALSE), #option for plot
                                           submitButton("Show Summary Risk Ratio"),
@@ -73,11 +93,11 @@ ui <-  navbarPage(useShinyjs(),
                              tabPanel("Risk Difference",
                                       sidebarLayout(
                                         sidebarPanel(
-                                          textInput('crd', 'Enter crude data (separated by comma)'),
+                                          textInput('crd', 'Enter crude data (a, b, c, d)'),
                                           checkboxInput('intcrd','Show Interpretation', F),
                                           submitButton("Show Crude Risk Difference"),
                                           br(),#adding blank space
-                                          textInput('srd', 'Enter summary data (separated by comma)'),
+                                          textInput('srd', 'Enter summary data (a1, b1, c1, d1...)'),
                                           checkboxInput('intsrd','Show Interpretation', F),
                                           checkboxInput('rd', 'Show Risk Difference Comparsion Plot', F), #option for plot
                                           submitButton("Show Summary Risk Difference"),
@@ -100,16 +120,16 @@ ui <-  navbarPage(useShinyjs(),
 
                   ################################################################################################################
                   #panel 2 for rate ratio and difference
-                  navbarMenu("Person-Time data",
+                  navbarMenu("Person-Time Data",
                              #rate ratio tab
                              tabPanel("Rate Ratio",
                                       sidebarLayout(
                                         sidebarPanel(
-                                          textInput('cirr', 'Enter crude data (separated by comma)'),
+                                          textInput('cirr', 'Enter crude data (a, b, c, d)'),
                                           checkboxInput("intcirr","Show Interpretation", F),
                                           submitButton("Show Crude Rate Ratio"),
                                           br(),#adding blank space
-                                          textInput('sirr', 'Enter summary data (separated by comma)'),
+                                          textInput('sirr', 'Enter summary data (a1, b1, c1, d1...)'),
                                           checkboxInput("intsirr","Show Interpretation", F),
                                           checkboxInput('irr', 'Show Rate Ratio Comparsion Plot'), #option for plot
                                           submitButton("Show Summary Rate Ratio"),
@@ -132,11 +152,11 @@ ui <-  navbarPage(useShinyjs(),
                              tabPanel("Rate Difference",
                                       sidebarLayout(
                                         sidebarPanel(
-                                          textInput('cird', 'Enter crude data (separated by comma)'),
+                                          textInput('cird', 'Enter crude data (a, b, c, d)'),
                                           checkboxInput("intcird","Show Interpretation", F),
                                           submitButton("Show Crude Rate Difference"),
                                           br(),#adding blank space
-                                          textInput('sird', 'Enter summary data (separated by comma)'),
+                                          textInput('sird', 'Enter summary data (a1, b1, c1, d1...)'),
                                           checkboxInput("intsird","Show Interpretation", F),
                                           checkboxInput('ird', 'Show Rate Difference Comparsion Plot'), #option for plot
                                           submitButton("Show Summary Rate Difference"),
