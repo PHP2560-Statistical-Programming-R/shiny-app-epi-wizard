@@ -38,8 +38,8 @@ Summary data format is the same, just remember to use a comma to separate data f
 
 ### Contributions:
 
-* Sadia Sharmin - Created the functions for risk ratio and risk difference calculations. Designed the comparison graphs and download functions. Created graph and download functions for risk data panel. Designed the layout of the App.
-* Ze Zhang - Created the functions for rate ratio and rate difference calculations. Created graph and download functions for Person-time data panel. Design the structure of the App.
+* Sadia Sharmin - Created the functions for risk ratio and risk difference calculations. Designed the comparison graphs and download functions. Created graph and download functions for risk data panel. Designed the 'Example Data' panel. Designed the layout of the App.
+* Ze Zhang - Created the functions for rate ratio and rate difference calculations. Created graph and download functions for Person-time data panel. Designed and created all interpretation functions for the App. Designed the 'Introduction' panel. Design the structure of the App.
 * Catrina Mueller-Leonhard - Created the functions for Odds Ratio, AR, AR%, PAR, PAR% calculations and graphs. Designed the theme of the App.
 
 &nbsp;
